@@ -22,7 +22,7 @@ if __name__ == '__main__':
         if GPIO.event_detected(back_door):
             # if we're here, an edge was detected
             time.sleep(0.005)  # debounce for 5mSec
-            # only show valid edges
+            # If input is True is a Rising EDGE else a Falling EDGE
             if GPIO.input(back_door) == 1:
                 start_time = time.time()
                 rising_edge = True
