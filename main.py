@@ -6,10 +6,10 @@ import time
 
 if __name__ == '__main__':
 
-    back_door = 2
+    back_door = 8
     # hardware setup
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(2, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.setup(back_door, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
     GPIO.add_event_detect(back_door, GPIO.BOTH, bouncetime=200)  # add rising edge detection on a channel
 
     rising_edge = False
@@ -40,6 +40,7 @@ if __name__ == '__main__':
                 x = requests.post(url, data=myobj)
                 # restart the timmer to send other POST request after 10 senconds more
                 start_time = time.time()
+                print('interrupt')
         if falling_edge:
             # generate a POST Request to notify that DOOR has beed closed
             falling_edge = True
