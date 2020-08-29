@@ -5,7 +5,7 @@ import time
 
 
 def telegram_message(warning: str):
-    BASE_TELEGRAM_URL = 'https://api.telegram.org/bot{}'.format("1322349645:AAHJILmhdAIuP_8VX4aMJ3o9Xgifa_CpA5U")
+    BASE_TELEGRAM_URL = 'https://api.telegram.org/bot{}'.format("...")
     TELEGRAM_SEND_MESSAGE_URL = BASE_TELEGRAM_URL + '/sendMessage?chat_id={}&text={}'.format(1192866213, warning)
     requests.post(TELEGRAM_SEND_MESSAGE_URL)
 
