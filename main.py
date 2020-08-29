@@ -4,6 +4,12 @@ import RPi.GPIO as GPIO
 import time
 
 
+def telegram_message(warning: str):
+    BASE_TELEGRAM_URL = 'https://api.telegram.org/bot{}'.format("1322349645:AAHJILmhdAIuP_8VX4aMJ3o9Xgifa_CpA5U")
+    TELEGRAM_SEND_MESSAGE_URL = BASE_TELEGRAM_URL + '/sendMessage?chat_id={}&text={}'.format(1192866213, warning)
+    requests.post(TELEGRAM_SEND_MESSAGE_URL)
+
+
 if __name__ == '__main__':
 
     back_door = 8
@@ -15,8 +21,6 @@ if __name__ == '__main__':
     rising_edge = False
     falling_edge = False
     start_time = 0
-    url = 'https://www.w3schools.com/python/demopage.php'
-    myobj = {'somekey': 'somevalue'}
 
     while True:
         if GPIO.event_detected(back_door):
@@ -35,9 +39,9 @@ if __name__ == '__main__':
         if rising_edge:
             # Count 10 seconds
             elapsed_time = time.time() - start_time
-            if elapsed_time > 10:
+            if elapsed_time > 1:
                 #   generate a POST Request to notify that DOOR has been OPENED
-                x = requests.post(url, data=myobj)
+                telegram_message("Warning: Your door is open")
                 # restart the timmer to send other POST request after 10 senconds more
                 start_time = time.time()
                 print('interrupt')
