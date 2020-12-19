@@ -17,11 +17,13 @@ def create_call(phone_number: str = '3122535580'):
         from_='+12517583596'
     )
     print(call.sid)
+# id group 496704946
 
 
 def telegram_message(warning: str):
-    BASE_TELEGRAM_URL = 'https://api.telegram.org/bot{}'.format("...")
-    TELEGRAM_SEND_MESSAGE_URL = BASE_TELEGRAM_URL + '/sendMessage?chat_id={}&text={}'.format(1192866213, warning)
+    BASE_TELEGRAM_URL = 'https://api.telegram.org/bot{}'.format("1448184781:AAF8QCnpQN-ZZr8Y_ddVY0sgiPWfF0ZJwrs")
+    TELEGRAM_SEND_MESSAGE_URL = BASE_TELEGRAM_URL + '/sendMessage?chat_id={}&text={}'.format(-496704946,
+                                                                                             warning)
     requests.post(TELEGRAM_SEND_MESSAGE_URL)
 
 
