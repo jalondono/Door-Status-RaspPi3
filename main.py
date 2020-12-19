@@ -6,7 +6,7 @@ import os
 from twilio.rest import Client
 
 
-def create_call(phone_number: str = '3005159763'):
+def create_call(phone_number: str = '3122535580'):
     account_sid = os.environ['TWILIO_ACCOUNT_SID']
     auth_token = os.environ['TWILIO_AUTH_TOKEN']
     client = Client(account_sid, auth_token)
@@ -57,6 +57,8 @@ if __name__ == '__main__':
             if elapsed_time > 1:
                 #   generate a POST Request to notify that DOOR has been OPENED
                 telegram_message("Peligro: La puerta del sotano esta abierta")
+                # Create a phone call
+                create_call('3122535580')
                 # restart the timmer to send other POST request after 10 senconds more
                 start_time = time.time()
                 print('interrupt')
