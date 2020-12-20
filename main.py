@@ -37,8 +37,17 @@ if __name__ == '__main__':
 
     rising_edge = False
     falling_edge = False
+    elapsed_ok = False
     start_time = 0
-
+    channel = GPIO.input(back_door)
+    
+    # Check for the initial status of the door when the program start
+    if channel:
+        telegram_message("Peligro: La puerta del sotano esta abierta")
+        create_call('3122535580')
+        rising_edge = True
+        elapsed_ok = True
+    
     while True:
         if GPIO.event_detected(back_door):
             # if we're here, an edge was detected
@@ -56,18 +65,22 @@ if __name__ == '__main__':
         if rising_edge:
             # Count 10 seconds
             elapsed_time = time.time() - start_time
-            if elapsed_time > 1:
+            print(f'elapsed_time is: {elapsed_time}')
+            if elapsed_time >= 200:
                 #   generate a POST Request to notify that DOOR has been OPENED
                 telegram_message("Peligro: La puerta del sotano esta abierta")
                 # Create a phone call
                 create_call('3122535580')
                 # restart the timmer to send other POST request after 10 senconds more
                 start_time = time.time()
-                print('interrupt')
+                elapsed_ok = True
+
         if falling_edge:
+            if elapsed_ok:
             # generate a POST Request to notify that DOOR has beed closed
-            print("La puerta ha sido cerrada")
-            falling_edge = True
+                telegram_message("La puerta ha sido cerrada")
+                elapsed_ok = False
+            falling_edge = False
         time.sleep(.01)  # Delay to not use the whole cpu
     # clean all
     GPIO.cleanup()
