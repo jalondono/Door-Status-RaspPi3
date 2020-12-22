@@ -66,21 +66,27 @@ if __name__ == '__main__':
             # Count 10 seconds
             elapsed_time = time.time() - start_time
             print(f'elapsed_time is: {elapsed_time}')
-            if elapsed_time >= 300:
-                #   generate a POST Request to notify that DOOR has been OPENED
-                telegram_message("Peligro: La puerta del sotano lleva mas de 5 minutos abierta")
-                # Create a phone call
-                create_call(phone_numbers)
-                # restart the timmer to send other POST request after 10 senconds more
-                start_time = time.time()
-                elapsed_ok = True
+            if elapsed_time >= 80:
+                try:
+                    #   generate a POST Request to notify that DOOR has been OPENED
+                    telegram_message("Peligro: La puerta del sotano lleva mas de 5 minutos abierta")
+                    # Create a phone call
+                    create_call(phone_numbers)
+                    # restart the timmer to send other POST request after 10 senconds more
+                    start_time = time.time()
+                    elapsed_ok = True
+                except:
+                    pass
 
         if falling_edge:
-            if elapsed_ok:
-            # generate a POST Request to notify that DOOR has beed closed
-                telegram_message("La puerta ha sido cerrada")
-                elapsed_ok = False
-            falling_edge = False
+            try:
+                if elapsed_ok:
+                # generate a POST Request to notify that DOOR has beed closed
+                    telegram_message("La puerta ha sido cerrada")
+                    elapsed_ok = False
+                falling_edge = False
+            except:
+                pass
         time.sleep(.01)  # Delay to not use the whole cpu
     # clean all
     GPIO.cleanup()
