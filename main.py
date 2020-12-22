@@ -11,11 +11,14 @@ def create_call(phone_numbers: list = ['3122535580']):
     auth_token = os.environ['TWILIO_AUTH_TOKEN']
     client = Client(account_sid, auth_token)
     for phone_number in phone_numbers:
-        call = client.calls.create(
-            url='http://demo.twilio.com/docs/voice.xml',
-            to=f'+57{phone_number}',
-            from_='+12517583596'
-        )
+        try:
+            call = client.calls.create(
+                url='http://demo.twilio.com/docs/voice.xml',
+                to=f'+57{phone_number}',
+                from_='+12517583596'
+            )
+        except:
+            continue
         print(call.sid)
 # id group 496704946
 
@@ -43,8 +46,8 @@ if __name__ == '__main__':
     
     # Check for the initial status of the door when the program start
     if channel:
-        telegram_message("Peligro: La puerta del sotano esta abierta")
-        create_call('3122535580')
+        telegram_message("Peligro: La puerta del sotano lleva mas de 1  minuto abierta")
+        create_call(phone_numbers)
         rising_edge = True
         elapsed_ok = True
     
@@ -69,7 +72,7 @@ if __name__ == '__main__':
             if elapsed_time >= 80:
                 try:
                     #   generate a POST Request to notify that DOOR has been OPENED
-                    telegram_message("Peligro: La puerta del sotano lleva mas de 5 minutos abierta")
+                    telegram_message("Peligro: La puerta del sotano lleva mas de 1  minuto abierta")
                     # Create a phone call
                     create_call(phone_numbers)
                     # restart the timmer to send other POST request after 10 senconds more
