@@ -69,7 +69,7 @@ if __name__ == '__main__':
             # Count 10 seconds
             elapsed_time = time.time() - start_time
             print(f'elapsed_time is: {elapsed_time}')
-            if elapsed_time >= 80:
+            if elapsed_time >= 30:
                 try:
                     start_time = time.time()
                     elapsed_ok = True
