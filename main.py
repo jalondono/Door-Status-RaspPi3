@@ -71,13 +71,13 @@ if __name__ == '__main__':
             print(f'elapsed_time is: {elapsed_time}')
             if elapsed_time >= 80:
                 try:
+                    start_time = time.time()
+                    elapsed_ok = True
                     #   generate a POST Request to notify that DOOR has been OPENED
                     telegram_message("Peligro: La puerta del sotano lleva mas de 1  minuto abierta")
                     # Create a phone call
                     create_call(phone_numbers)
                     # restart the timmer to send other POST request after 10 senconds more
-                    start_time = time.time()
-                    elapsed_ok = True
                 except:
                     pass
 
