@@ -20,6 +20,8 @@ def create_call(phone_numbers: list = ['3122535580']):
         except:
             continue
         print(call.sid)
+
+
 # id group 496704946
 
 
@@ -43,14 +45,18 @@ if __name__ == '__main__':
     elapsed_ok = False
     start_time = 0
     channel = GPIO.input(back_door)
-    
+    start_frequency_time = 0
+    elapsed_frequency_time = 0
+    time_notifications = 60
+    i = 0
+
     # Check for the initial status of the door when the program start
     if channel:
-        telegram_message("Peligro: La puerta del sotano lleva mas de 1  minuto abierta")
+        telegram_message("Peligro: La puerta del sotano esta abierta")
         create_call(phone_numbers)
         rising_edge = True
         elapsed_ok = True
-    
+
     while True:
         if GPIO.event_detected(back_door):
             # if we're here, an edge was detected
@@ -71,12 +77,21 @@ if __name__ == '__main__':
             print(f'elapsed_time is: {elapsed_time}')
             if elapsed_time >= 30:
                 try:
-                    start_time = time.time()
                     elapsed_ok = True
-                    #   generate a POST Request to notify that DOOR has been OPENED
-                    telegram_message("Peligro: La puerta del sotano lleva mas de 1  minuto abierta")
-                    # Create a phone call
-                    create_call(phone_numbers)
+                    elapsed_frequency_time = time.time() - start_frequency_time
+                    if time.time() - elapsed_frequency_time <= 1:
+                        #   generate a POST Request to notify that DOOR has been OPENED
+                        telegram_message("Peligro: La puerta del sotano lleva mas de 30  segundos abierta")
+                        # Create a phone call
+                        create_call(phone_numbers)
+                    else:
+                        if elapsed_frequency_time >= time_notifications or elapsed_frequency_time == time.time():
+                            i += 1
+                            start_frequency_time = time.time()
+                            #   generate a POST Request to notify that DOOR has been OPENED
+                            telegram_message(f"Peligro: La puerta del sotano lleva mas de {i*time_notifications} segundos abierta")
+                            # Create a phone call
+                            create_call(phone_numbers)
                     # restart the timmer to send other POST request after 10 senconds more
                 except:
                     pass
@@ -84,9 +99,11 @@ if __name__ == '__main__':
         if falling_edge:
             try:
                 if elapsed_ok:
-                # generate a POST Request to notify that DOOR has beed closed
+                    # generate a POST Request to notify that DOOR has beed closed
+                    start_time = time.time()
                     telegram_message("La puerta ha sido cerrada")
                     elapsed_ok = False
+                    i = 0
                 falling_edge = False
             except:
                 pass
