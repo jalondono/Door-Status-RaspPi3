@@ -43,19 +43,24 @@ if __name__ == '__main__':
     rising_edge = False
     falling_edge = False
     elapsed_ok = False
+    past_status = False
+    actual_status = False
     start_time = 0
     channel = GPIO.input(back_door)
     start_frequency_time = 0
     elapsed_frequency_time = 0
-    time_notifications = 60
+    time_notifications = 80
     i = 0
 
     # Check for the initial status of the door when the program start
     if channel:
-        telegram_message("Peligro: La puerta del sotano esta abierta")
-        create_call(phone_numbers)
         rising_edge = True
         elapsed_ok = True
+        try:
+            telegram_message("Peligro: La puerta del sotano esta abierta")
+            create_call(phone_numbers)
+        except:
+            pass
 
     while True:
         if GPIO.event_detected(back_door):
@@ -75,7 +80,14 @@ if __name__ == '__main__':
             # Count 10 seconds
             elapsed_time = time.time() - start_time
             print(f'elapsed_time is: {elapsed_time}')
-            if elapsed_time >= 30:
+
+            # detect the rising trigger on the elapsed time to start the second timer
+            actual_status = elapsed_time >= 30
+            if past_status != actual_status:
+                start_frequency_time = time.time()
+                past_status = actual_status
+
+            if actual_status >= 30:
                 try:
                     elapsed_ok = True
                     elapsed_frequency_time = time.time() - start_frequency_time
