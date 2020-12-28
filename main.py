@@ -87,7 +87,7 @@ if __name__ == '__main__':
                 start_frequency_time = time.time()
                 past_status = actual_status
 
-            if actual_status >= 30:
+            if actual_status:
                 try:
                     elapsed_ok = True
                     elapsed_frequency_time = time.time() - start_frequency_time
