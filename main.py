@@ -97,6 +97,8 @@ if __name__ == '__main__':
                         # Create a phone call
                         create_call(phone_numbers)
                     else:
+                        if i > 100 and channel:
+                            falling_edge = True
                         if elapsed_frequency_time >= time_notifications or elapsed_frequency_time == time.time():
                             i += 1
                             start_frequency_time = time.time()
